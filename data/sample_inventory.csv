@@ -1,0 +1,61 @@
+sku,product_name,category,supplier,unit_cost,unit_price,current_stock,units_on_order,committed_stock,avg_daily_demand,demand_std_dev,lead_time_days,order_cost,annual_holding_rate
+ELC-001,Servo Drive Premium,Electrical,Boreal Components,118.39,160.4,349,0,30,11.87,5.48,27,90.72,0.21
+ELC-002,Proximity Sensor Series X,Electrical,Summit MRO,51.95,83.91,253,0,12,9.66,2.9,15,137.75,0.24
+ELC-003,Control Relay Series X,Electrical,Evergreen Safety,149.87,214.96,619,0,22,13.05,2.37,29,130.96,0.2
+ELC-004,Power Supply Series X,Electrical,Delta Motion,122.28,172.73,189,0,19,4.7,1.46,32,128.54,0.26
+ELC-005,Encoder Module Compact,Electrical,Crown Supply Group,160.08,285.18,417,0,60,12.88,4.98,25,125.51,0.3
+ELC-006,Industrial Switch Standard,Electrical,Boreal Components,119.75,157.84,347,0,57,4.67,1.03,29,47.05,0.32
+ELC-007,Terminal Block Heavy-Duty,Electrical,Northline Packaging,57.41,88.92,334,0,53,7.67,2.91,25,120.57,0.19
+ELC-008,Circuit Breaker Series X,Electrical,Precision Source,68.83,89.03,686,0,81,7.94,3.43,32,158.58,0.27
+ELC-009,Signal Converter Heavy-Duty,Electrical,Northline Packaging,59.02,97.01,118,0,14,2.4,0.43,41,59.07,0.28
+ELC-010,Motor Starter Premium,Electrical,Precision Source,83.12,133.94,140,0,23,5.25,1.33,26,31.93,0.25
+MEC-001,Precision Bearing Compact,Mechanical,Crown Supply Group,119.33,173.84,196,0,20,19.0,3.1,10,144.99,0.24
+MEC-002,Shaft Coupling Heavy-Duty,Mechanical,Evergreen Safety,122.6,157.36,595,0,79,14.54,2.46,25,80.46,0.24
+MEC-003,Drive Belt Heavy-Duty,Mechanical,Precision Source,76.69,115.46,207,0,24,17.89,3.87,11,95.58,0.3
+MEC-004,Linear Guide Series X,Mechanical,Summit MRO,118.09,166.91,345,0,51,3.28,1.49,24,71.96,0.29
+MEC-005,Gear Assembly Compact,Mechanical,Summit MRO,51.62,69.35,204,0,29,9.89,2.3,20,136.83,0.26
+MEC-006,Pneumatic Cylinder Compact,Mechanical,Precision Source,92.11,131.08,489,0,29,17.32,5.67,22,84.65,0.29
+MEC-007,Valve Actuator Heavy-Duty,Mechanical,Atlas Industrial,79.02,110.34,299,0,35,19.35,8.7,11,80.14,0.21
+MEC-008,Timing Pulley Pro,Mechanical,Summit MRO,94.74,164.31,370,0,56,10.14,4.35,28,136.44,0.32
+MEC-009,Rotary Seal Compact,Mechanical,Atlas Industrial,102.03,160.12,362,0,58,14.89,4.04,30,87.82,0.25
+MEC-010,Vibration Mount Pro,Mechanical,Evergreen Safety,105.58,145.34,251,0,37,9.75,3.12,20,165.0,0.3
+FST-001,Hex Bolt Heavy-Duty,Fasteners,Boreal Components,4.21,5.58,2125,0,331,60.05,17.66,13,127.83,0.18
+FST-002,Lock Nut Pro,Fasteners,Delta Motion,1.12,1.76,1714,0,59,64.0,12.46,16,151.36,0.24
+FST-003,Flat Washer Standard,Fasteners,Evergreen Safety,3.29,4.42,1519,0,72,70.36,18.33,17,125.32,0.22
+FST-004,Socket Screw Standard,Fasteners,Crown Supply Group,3.59,5.0,835,0,102,48.83,7.18,17,76.97,0.22
+FST-005,Spring Pin Compact,Fasteners,Boreal Components,3.16,5.03,0,591,0,69.15,21.58,12,78.49,0.19
+FST-006,Threaded Insert Heavy-Duty,Fasteners,Boreal Components,2.63,3.87,495,0,11,35.19,10.8,13,33.59,0.25
+FST-007,Retaining Ring Compact,Fasteners,Delta Motion,1.4,1.81,769,0,67,32.55,12.31,13,163.87,0.32
+FST-008,Machine Screw Premium,Fasteners,Summit MRO,4.34,6.97,293,370,6,59.75,24.94,5,129.91,0.24
+FST-009,Anchor Bolt Pro,Fasteners,Delta Motion,2.13,3.42,623,1193,38,72.97,31.86,15,61.88,0.27
+FST-010,Rivet Nut Pro,Fasteners,Delta Motion,1.17,1.53,528,0,18,63.37,19.5,6,73.04,0.31
+PKG-001,Shipping Carton Heavy-Duty,Packaging,Crown Supply Group,4.89,7.54,649,0,88,30.28,12.12,16,54.98,0.29
+PKG-002,Protective Insert Pro,Packaging,Summit MRO,9.51,16.06,1028,0,161,64.62,28.6,5,44.5,0.18
+PKG-003,Stretch Film Premium,Packaging,Precision Source,8.24,11.88,426,0,38,34.33,12.15,4,80.78,0.23
+PKG-004,Barcode Label Heavy-Duty,Packaging,Precision Source,2.55,3.94,706,0,104,54.26,11.08,16,61.8,0.19
+PKG-005,Poly Mailer Pro,Packaging,Precision Source,5.9,8.27,277,0,45,17.03,5.61,15,140.4,0.26
+PKG-006,Foam Sheet Pro,Packaging,Evergreen Safety,7.77,13.62,967,0,33,55.39,16.68,21,42.42,0.22
+PKG-007,Packing Tape Standard,Packaging,Evergreen Safety,9.24,16.35,198,0,4,32.86,11.87,5,35.6,0.18
+PKG-008,Corner Protector Compact,Packaging,Northline Packaging,1.16,1.68,587,0,43,39.38,13.68,8,124.23,0.27
+PKG-009,Pallet Cover Premium,Packaging,Boreal Components,2.58,4.05,354,0,61,49.33,16.63,5,149.14,0.25
+PKG-010,Document Pouch Standard,Packaging,Summit MRO,8.38,14.15,1068,0,65,42.85,9.75,20,79.9,0.25
+SAF-001,Safety Glasses Standard,Safety,Crown Supply Group,33.16,43.94,62,0,7,9.58,1.7,28,113.17,0.26
+SAF-002,Cut-Resistant Gloves Premium,Safety,Atlas Industrial,60.14,102.95,168,0,26,5.16,2.04,25,82.14,0.28
+SAF-003,Hearing Protection Pro,Safety,Delta Motion,43.96,60.19,108,0,5,11.38,3.54,11,135.81,0.29
+SAF-004,Face Shield Heavy-Duty,Safety,Atlas Industrial,7.45,12.86,21,78,3,3.42,0.95,25,144.22,0.28
+SAF-005,Respirator Cartridge Premium,Safety,Evergreen Safety,47.18,67.38,160,0,28,7.42,1.95,17,98.79,0.2
+SAF-006,High-Visibility Vest Pro,Safety,Crown Supply Group,49.79,82.26,38,0,5,5.55,1.24,8,151.12,0.25
+SAF-007,Protective Helmet Heavy-Duty,Safety,Atlas Industrial,74.01,111.85,96,0,17,11.97,3.89,7,71.84,0.26
+SAF-008,Spill Kit Pro,Safety,Evergreen Safety,28.56,49.64,154,0,27,9.23,2.17,6,40.14,0.22
+SAF-009,First Aid Refill Series X,Safety,Summit MRO,51.48,82.9,114,0,14,5.06,2.27,12,67.76,0.32
+SAF-010,Safety Harness Premium,Safety,Northline Packaging,29.58,39.43,57,0,5,4.47,1.4,15,159.81,0.19
+MRO-001,Industrial Lubricant Compact,MRO Supplies,Evergreen Safety,78.5,105.92,1319,0,90,17.52,2.64,30,146.97,0.22
+MRO-002,Cleaning Solvent Premium,MRO Supplies,Crown Supply Group,45.48,72.47,514,0,35,12.8,3.02,24,93.45,0.21
+MRO-003,Shop Towel Roll Series X,MRO Supplies,Northline Packaging,39.19,65.2,518,0,18,6.51,2.74,18,121.62,0.21
+MRO-004,Cutting Fluid Heavy-Duty,MRO Supplies,Summit MRO,28.42,38.58,124,0,17,14.34,2.23,17,94.75,0.31
+MRO-005,Adhesive Sealant Heavy-Duty,MRO Supplies,Crown Supply Group,57.43,91.5,943,0,74,16.22,3.42,14,47.65,0.25
+MRO-006,Abrasive Disc Standard,MRO Supplies,Precision Source,22.78,39.02,268,0,6,14.21,3.04,11,69.45,0.3
+MRO-007,Filter Element Compact,MRO Supplies,Northline Packaging,18.44,30.97,592,0,83,11.17,5.2,30,149.5,0.25
+MRO-008,Maintenance Spray Premium,MRO Supplies,Precision Source,69.83,112.94,324,0,19,12.73,2.81,15,145.9,0.23
+MRO-009,Grease Cartridge Premium,MRO Supplies,Atlas Industrial,37.15,65.59,323,0,13,4.4,0.79,29,67.45,0.23
+MRO-010,Welding Wire Series X,MRO Supplies,Atlas Industrial,24.69,31.99,66,0,7,3.54,1.52,6,86.91,0.24
