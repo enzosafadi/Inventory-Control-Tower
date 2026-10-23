@@ -1,16 +1,16 @@
 # Inventory Control Tower
 
-## Replenishment & Risk Intelligence
+## Inventory Optimization and Replenishment Planning
 
 ![Inventory optimizer dashboard preview](assets/dashboard_preview.png)
 
 A client-ready Python decision-support application that converts a raw inventory CSV into a prioritized replenishment plan, stockout-risk view, ABC segmentation, and working-capital analysis.
 
-**Built by Braulio · Portfolio demonstration · Synthetic data only**
+**Built by Braulio · Portfolio Demonstration · Synthetic Data Only**
 
-**Project date: 2020 · Version: 1.0**
+**Project Date: 2020 · Version: 1.0**
 
-## Business problem
+## Business Problem
 
 Inventory teams often manage reorder decisions in spreadsheets with inconsistent formulas, weak prioritization, and limited visibility into the financial impact of stockouts or excess inventory. This application creates one controlled decision layer that answers four operational questions:
 
@@ -19,7 +19,7 @@ Inventory teams often manage reorder decisions in spreadsheets with inconsistent
 3. Where is margin exposed to a projected shortage?
 4. Where is cash tied up above the modeled stock target?
 
-## Delivered capabilities
+## Delivered Capabilities
 
 - CSV upload with schema validation and actionable error messages
 - Safety-stock calculation using a configurable target service level
@@ -34,7 +34,7 @@ Inventory teams often manage reorder decisions in spreadsheets with inconsistent
 - Automated regression tests and GitHub Actions workflow
 - Data dictionary, methodology, assumptions, and client handoff guide
 
-## Validated demo result
+## Validated Demonstration Results
 
 At the default 95% service level, the included 60-SKU synthetic dataset produces a fully reconciled management view:
 
@@ -48,7 +48,7 @@ At the default 95% service level, the included 60-SKU synthetic dataset produces
 
 These figures demonstrate the workflow and are not claimed client results.
 
-## Application architecture
+## Application Architecture
 
 ```mermaid
 flowchart TD
@@ -62,7 +62,7 @@ flowchart TD
 
 The calculation engine is independent from the Streamlit interface. It can be reused later in an API, scheduled batch process, or ERP integration without rewriting the business logic.
 
-## Quick start on Windows PowerShell
+## Quick Start on Windows PowerShell
 
 From the project folder:
 
@@ -74,13 +74,13 @@ py -m venv .venv
 
 The application opens in the browser. It starts with a 60-SKU professional demo dataset; upload another CSV from the left control panel when ready.
 
-## Run the regression tests
+## Run the Regression Tests
 
 ```powershell
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-## Input file
+## Input File
 
 Use [`data/inventory_upload_template.csv`](data/inventory_upload_template.csv) as the starting template. Required fields are:
 
@@ -102,7 +102,7 @@ Optional fields are `supplier`, `units_on_order`, and `committed_stock`. Missing
 
 See [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md) for complete definitions and calculation logic.
 
-## Core formulas
+## Core Formulas
 
 | Decision measure | Formula |
 |---|---|
@@ -113,7 +113,7 @@ See [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md) for complete definition
 | Order recommendation | replenish to reorder point + EOQ when inventory position reaches the reorder point |
 | ABC class | cumulative annual usage value using 80% / 15% / 5% bands |
 
-## Status logic
+## Status Logic
 
 | Status | Management interpretation |
 |---|---|
@@ -124,7 +124,7 @@ See [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md) for complete definition
 | `HEALTHY` | Inventory is within the modeled operating range |
 | `EXCESS` | Inventory exceeds both the target stock and days-of-supply threshold |
 
-## Project structure
+## Project Structure
 
 ```text
 inventory-control-tower/
@@ -147,11 +147,11 @@ inventory-control-tower/
     └── dashboard_preview.png
 ```
 
-## Controls and limitations
+## Controls & Limitations
 
 This is a planning model, not an autonomous purchasing system. Before production use, a client should validate demand history, lead-time definitions, service targets, and cost assumptions. Supplier minimum order quantities, case packs, production capacity, seasonality, expiration constraints, and negotiated order calendars are not included in version 1.0.
 
-## Recommended production roadmap
+## Production Roadmap
 
 1. Connect actual ERP inventory, purchase-order, and sales-history tables.
 2. Calculate demand variability from transaction history rather than imported summary fields.
