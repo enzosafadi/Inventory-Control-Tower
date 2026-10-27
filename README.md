@@ -6,7 +6,7 @@
 
 A client-ready Python decision-support application that converts a raw inventory CSV into a prioritized replenishment plan, stockout-risk view, ABC segmentation, and working-capital analysis.
 
-**Built by Braulio · Portfolio Demonstration · Synthetic Data Only**
+**Built by Enzo · Portfolio Demonstration · Synthetic Data Only**
 
 **Project Date: 2020 · Version: 1.0**
 
@@ -167,4 +167,10 @@ This is a planning model, not an autonomous purchasing system. Before production
 
 ---
 
-Copyright © 2020 Braulio. Released as a portfolio demonstration.
+Copyright © 2020 Enzo. Released as a portfolio demonstration.
+
+## Who it benefits
+
+Inventory planners, purchasing teams and warehouse managers: prioritized replenishment reviews, stockout-risk visibility and modeled working-capital exposure.
+
+These are intended users and benefits, not evidence of adoption or measured customer outcomes.
