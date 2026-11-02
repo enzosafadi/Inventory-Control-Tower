@@ -1,5 +1,10 @@
 # Inventory Control Tower
 
+## Project roadmap — concept to sale
+
+![Inventory-Control-Tower roadmap with navy current-position line](docs/project-roadmap.svg)
+
+
 ## Inventory Optimization and Replenishment Planning
 
 ![Inventory optimizer dashboard preview](assets/dashboard_preview.png)
