@@ -179,3 +179,7 @@ Copyright © 2020 Enzo. Released as a portfolio demonstration.
 Inventory planners, purchasing teams and warehouse managers: prioritized replenishment reviews, stockout-risk visibility and modeled working-capital exposure.
 
 These are intended users and benefits, not evidence of adoption or measured customer outcomes.
+
+## Repository verification
+
+[Current scoped verification results](VERIFICATION.md). Run `python tools/verify_repository.py --visibility public`.
