@@ -48,7 +48,7 @@ The following items should be completed before automated purchasing or enterpris
 
 - ERP/API authentication and field-level mapping
 - Role-based access and audit logging
-- MOQ, case-pack, supplier calendar, and contract constraints
+- Validate supplied MOQ and case-pack fields; supplier calendar and contract constraints remain pending
 - Demand-history pipeline and seasonality treatment
 - User acceptance testing with planners and buyers
 - Exception ownership and approval workflow
@@ -56,4 +56,4 @@ The following items should be completed before automated purchasing or enterpris
 
 ## Support boundary
 
-Version 1.0 provides decision support. It does not automatically create, approve, or transmit purchase orders. Recommendations require human review because commercial constraints may not exist in the input data.
+Version 1.1 provides decision support. It does not automatically create, approve, or transmit purchase orders. Recommendations require human review because commercial constraints may not exist in the input data.

@@ -138,5 +138,34 @@ class CalculationTests(unittest.TestCase):
         )
 
 
+class PurchasingConstraintTests(unittest.TestCase):
+    def test_minimum_and_pack_are_applied_together(self):
+        item = analyze_inventory(pd.DataFrame([make_row(min_order_qty=400, case_pack=24)])).iloc[0]
+        self.assertEqual(item["unconstrained_order_qty"], 330)
+        self.assertEqual(item["recommended_order_qty"], 408)
+        self.assertEqual(item["constraint_extra_cost"], 1950)
+        self.assertIn("recommend 408 units", item["order_explanation"])
+
+    def test_minimum_does_not_trigger_unnecessary_purchase(self):
+        item = analyze_inventory(pd.DataFrame([make_row(current_stock=800, min_order_qty=1000, case_pack=24)])).iloc[0]
+        self.assertEqual(item["recommended_order_qty"], 0)
+        self.assertEqual(item["constraint_extra_cost"], 0)
+
+    def test_zero_demand_does_not_trigger_minimum_purchase(self):
+        item = analyze_inventory(pd.DataFrame([make_row(current_stock=0, avg_daily_demand=0, demand_std_dev=0, min_order_qty=400)])).iloc[0]
+        self.assertEqual(item["recommended_order_qty"], 0)
+
+    def test_invalid_constraints_and_infinite_values_are_rejected(self):
+        for overrides in ({"case_pack": 0}, {"case_pack": 1.5}, {"min_order_qty": -1}, {"unit_cost": float("inf")}, {"avg_daily_demand": float("nan")}):
+            with self.subTest(overrides=overrides):
+                with self.assertRaises(InventoryDataError):
+                    analyze_inventory(pd.DataFrame([make_row(**overrides)]))
+
+    def test_supplier_is_optional(self):
+        row = make_row()
+        row.pop("supplier")
+        self.assertEqual(analyze_inventory(pd.DataFrame([row])).iloc[0]["supplier"], "Unassigned")
+
+
 if __name__ == "__main__":
     unittest.main()

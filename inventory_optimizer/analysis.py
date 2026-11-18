@@ -34,6 +34,8 @@ REQUIRED_COLUMNS: Final[tuple[str, ...]] = (
 OPTIONAL_DEFAULTS: Final[dict[str, float]] = {
     "units_on_order": 0.0,
     "committed_stock": 0.0,
+    "min_order_qty": 0.0,
+    "case_pack": 1.0,
 }
 
 NUMERIC_COLUMNS: Final[tuple[str, ...]] = (
@@ -47,6 +49,8 @@ NUMERIC_COLUMNS: Final[tuple[str, ...]] = (
     "lead_time_days",
     "order_cost",
     "annual_holding_rate",
+    "min_order_qty",
+    "case_pack",
 )
 
 STATUS_ORDER: Final[tuple[str, ...]] = (
@@ -104,6 +108,9 @@ def validate_inventory_data(frame: pd.DataFrame) -> pd.DataFrame:
         if column not in data.columns:
             data[column] = default
 
+    if "supplier" not in data.columns:
+        data["supplier"] = "Unassigned"
+
     errors: list[str] = []
 
     for column in ("sku", "product_name", "category"):
@@ -120,9 +127,9 @@ def validate_inventory_data(frame: pd.DataFrame) -> pd.DataFrame:
     for column in NUMERIC_COLUMNS:
         original = data[column]
         converted = pd.to_numeric(original, errors="coerce")
-        invalid_mask = converted.isna()
+        invalid_mask = converted.isna() | ~np.isfinite(converted)
         if invalid_mask.any():
-            errors.append(f"{column}: {int(invalid_mask.sum())} missing or non-numeric value(s)")
+            errors.append(f"{column}: {int(invalid_mask.sum())} missing, non-numeric or non-finite value(s)")
         data[column] = converted
 
     if not errors:
@@ -148,6 +155,13 @@ def validate_inventory_data(frame: pd.DataFrame) -> pd.DataFrame:
                 "annual_holding_rate: "
                 f"{invalid_holding_rate} value(s) must be greater than 0 and at most 1"
             )
+
+    for column in ("min_order_qty", "case_pack"):
+        values = data[column]
+        if ((values.dropna() % 1) != 0).any():
+            errors.append(f"{column}: quantities must be whole units")
+    if (data["case_pack"] <= 0).any():
+        errors.append("case_pack: must be greater than zero")
 
     if errors:
         raise InventoryDataError("; ".join(errors))
@@ -192,7 +206,7 @@ def analyze_inventory(
 
     The model assumes independent daily demand and a continuous-review policy.
     It is a decision-support model: planners remain responsible for supplier
-    constraints, minimum order quantities, capacity, and exceptional events.
+    terms, capacity, and exceptional events; supplied SKU minimums and packs are applied.
     """
 
     if not 0.50 < service_level < 0.999:
@@ -232,11 +246,34 @@ def analyze_inventory(
 
     should_reorder = data["inventory_position"] <= data["reorder_point"]
     order_gap = (data["target_stock"] - data["inventory_position"]).clip(lower=0)
-    data["recommended_order_qty"] = np.where(
-        should_reorder,
-        np.ceil(order_gap),
-        0,
+    data["unconstrained_order_qty"] = np.where(
+        should_reorder, np.ceil(order_gap), 0
     ).astype(int)
+    order_required = data["unconstrained_order_qty"] > 0
+    constrained_qty = np.ceil(
+        np.maximum(data["unconstrained_order_qty"], data["min_order_qty"])
+        / data["case_pack"]
+    ) * data["case_pack"]
+    data["recommended_order_qty"] = np.where(
+        order_required, constrained_qty, 0
+    ).astype(int)
+    data["constraint_extra_units"] = (
+        data["recommended_order_qty"] - data["unconstrained_order_qty"]
+    )
+    data["constraint_extra_cost"] = (
+        data["constraint_extra_units"] * data["unit_cost"]
+    ).round(2)
+    data["order_explanation"] = [
+        (f"Position {position:.1f} <= reorder point {point:.1f}; "
+         f"target {target:.1f}; base order {base}; MOQ {minimum:g}; "
+         f"pack {pack:g}; recommend {quantity} units.")
+        if quantity else "No purchase: no positive replenishment gap at the reorder trigger."
+        for position, point, target, base, minimum, pack, quantity in zip(
+            data["inventory_position"], data["reorder_point"], data["target_stock"],
+            data["unconstrained_order_qty"], data["min_order_qty"],
+            data["case_pack"], data["recommended_order_qty"],
+        )
+    ]
     data["suggested_purchase_cost"] = (
         data["recommended_order_qty"] * data["unit_cost"]
     )

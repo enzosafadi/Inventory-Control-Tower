@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 — 2026-11-18
+
+- Added supplier minimums, pack rounding, constraint cost and order explanations.
+- Added demand / supplier-delay scenario comparison and export.
+- Rejected non-finite numeric inputs and invalid purchasing constraints.
+- Added calculation regressions and a Streamlit interaction test.
+- Retained existing roadmap position; no production readiness or client outcomes claimed.
+
 ## 1.0.0 — 2020
 
 - Added validated CSV ingestion

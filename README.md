@@ -9,11 +9,11 @@
 
 ![Inventory optimizer dashboard preview](assets/dashboard_preview.png)
 
-A client-ready Python decision-support application that converts a raw inventory CSV into a prioritized replenishment plan, stockout-risk view, ABC segmentation, and working-capital analysis.
+A Python decision-support application that converts a raw inventory CSV into a prioritized replenishment plan, stockout-risk view, ABC segmentation, and working-capital analysis.
 
 **Built by Enzo · Portfolio Demonstration · Synthetic Data Only**
 
-**Project Date: 2020 · Version: 1.0**
+**Version: 1.1 · Updated: 2026-11-18**
 
 ## Business Problem
 
@@ -31,6 +31,9 @@ Inventory teams often manage reorder decisions in spreadsheets with inconsistent
 - Reorder point and Economic Order Quantity (EOQ)
 - Net inventory position using on-hand, committed, and inbound quantities
 - Recommended order quantity and line-level purchase value
+- Supplier minimum order quantities and case-pack rounding with extra-cost visibility
+- Plain-language explanations for purchase recommendations
+- Demand-surge and lead-time-delay scenario comparison with CSV export
 - Stockout, critical, reorder, watch, healthy, and excess statuses
 - ABC segmentation using annual usage value
 - Margin-at-risk and excess-capital estimates
@@ -103,7 +106,7 @@ Use [`data/inventory_upload_template.csv`](data/inventory_upload_template.csv) a
 | `order_cost` | Administrative cost per purchase order |
 | `annual_holding_rate` | Annual carrying rate as a decimal, such as `0.24` |
 
-Optional fields are `supplier`, `units_on_order`, and `committed_stock`. Missing optional quantity fields default to zero.
+Optional fields are `supplier`, `units_on_order`, `committed_stock`, `min_order_qty`, and `case_pack`. Quantity fields default to zero except `case_pack`, which defaults to 1. Minimums must be nonnegative whole units; packs must be positive whole units. Missing suppliers display as Unassigned.
 
 See [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md) for complete definitions and calculation logic.
 
@@ -154,13 +157,13 @@ inventory-control-tower/
 
 ## Controls & Limitations
 
-This is a planning model, not an autonomous purchasing system. Before production use, a client should validate demand history, lead-time definitions, service targets, and cost assumptions. Supplier minimum order quantities, case packs, production capacity, seasonality, expiration constraints, and negotiated order calendars are not included in version 1.0.
+This is a planning model, not an autonomous purchasing system. Before production use, a client should validate demand history, lead-time definitions, service targets, and cost assumptions. Production capacity, seasonality, expiration constraints, arrival dates for inbound orders, and negotiated order calendars are not included. Scenarios scale mean demand and demand standard deviation together; they are assumptions, not forecasts. Currency selection changes labels only and performs no exchange-rate conversion.
 
 ## Production Roadmap
 
 1. Connect actual ERP inventory, purchase-order, and sales-history tables.
 2. Calculate demand variability from transaction history rather than imported summary fields.
-3. Add minimum order quantities, case-pack rounding, supplier calendars, and budget caps.
+3. Add supplier calendars, budget caps, and dated inbound purchase orders.
 4. Schedule refreshes and publish exception alerts.
 5. Record planner decisions and measure stockout reduction, working-capital release, and forecast bias.
 
@@ -183,3 +186,13 @@ These are intended users and benefits, not evidence of adoption or measured cust
 ## Repository verification
 
 [Current scoped verification results](VERIFICATION.md). Run `python tools/verify_repository.py --visibility public`.
+
+## Purchasing decisions — v1.1
+
+When a positive replenishment gap triggers an order, the engine takes the larger of the base quantity and supplier minimum, then rounds up to a full case pack. Minimums never create an order for a SKU with no replenishment gap. The export reports extra units and cost imposed by these constraints, alongside a readable explanation.
+
+The What-if Planning tab compares the same category/ABC cohort before and after a demand change or additional supplier delay. Baseline ABC classes define the cohort; status filters are intentionally ignored so new risks remain visible. Exported recommendations remain subject to planner approval; no supplier orders are transmitted.
+
+Implemented as a public demonstration enhancement following the owner's request to strengthen the existing project. These are engineering choices, not confirmed requirements from the job advertisement. Only synthetic data is included. Historical sales forecasting and purchase-order approval/storage are still pending.
+
+For the full verification command, install development dependencies with `python -m pip install 'pytest>=8,<10'`, then run `python tools/verify_repository.py --visibility public`.
