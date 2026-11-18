@@ -208,7 +208,7 @@ with st.sidebar:
     selected_abc = st.multiselect("ABC class", ["A", "B", "C"], default=["A", "B", "C"])
     st.divider()
     st.caption(f"Source: {source_name}")
-    st.caption(f"Model: v1.0 · {service_level_pct}% service level")
+    st.caption(f"Model: v1.1 · {service_level_pct}% service level")
 
 filtered = analyzed.loc[
     analyzed["category"].isin(selected_categories)
@@ -239,6 +239,7 @@ tabs = st.tabs(
         "Reorder Action List",
         "ABC & Working Capital",
         "Data & Method",
+        "What-if Planning",
     ]
 )
 
@@ -396,6 +397,7 @@ with tabs[1]:
             f"{int(reorder_data['inventory_status'].isin(['STOCKOUT', 'CRITICAL']).sum()):,}",
         )
 
+        st.caption("Planning recommendations only. Review supplier terms before approving a purchase.")
         reorder_columns = [
             "priority_score",
             "sku",
@@ -413,7 +415,12 @@ with tabs[1]:
             "unit_cost",
             "suggested_purchase_cost",
             "margin_at_risk",
+            "min_order_qty",
+            "case_pack",
+            "constraint_extra_cost",
+            "order_explanation",
         ]
+        st.caption("Planning recommendations only. Review supplier terms before approving a purchase.")
         reorder_columns = [column for column in reorder_columns if column in reorder_data.columns]
         st.dataframe(
             reorder_data[reorder_columns],
@@ -591,6 +598,8 @@ with tabs[3]:
             ("annual_holding_rate", "Decimal", "Annual carrying rate as a decimal", "0.24"),
             ("units_on_order", "Number", "Optional open inbound quantity", "50"),
             ("committed_stock", "Number", "Optional allocated quantity", "20"),
+            ("min_order_qty", "Integer", "Optional supplier minimum per SKU; default 0", "100"),
+            ("case_pack", "Integer", "Optional order multiple; default 1", "12"),
             ("supplier", "Text", "Optional supplier name", "Atlas Industrial"),
         ]
         schema = pd.DataFrame(schema_rows, columns=["Field", "Type", "Business definition", "Example"])
@@ -612,8 +621,8 @@ with tabs[3]:
             - **Inventory position:** on hand − committed stock + open inbound stock
             - **ABC class:** cumulative share of annual demand value using 80% / 15% / 5% bands
 
-            Assumptions should be reviewed with procurement and operations before production use. Supplier minimums,
-            case packs, capacity constraints, seasonality, and negotiated order calendars are outside this version.
+            Assumptions should be reviewed with procurement and operations before production use. Supplier minimums and case packs are applied when supplied.
+            Capacity constraints, seasonality, inbound arrival dates, and negotiated order calendars remain outside this version.
             """
         )
 
@@ -626,6 +635,44 @@ with tabs[3]:
             file_name="inventory_optimization_analysis.csv",
             mime="text/csv",
         )
+
+with tabs[4]:
+    st.subheader("Test a demand surge or supplier delay")
+    st.caption("Assumption-based simulation, not a sales forecast. Compares the same category and ABC scope; status filters are ignored so newly exposed SKUs remain visible. Currency labels do not convert values.")
+    c1, c2 = st.columns(2)
+    demand_change = c1.slider("Demand change (%)", -50, 100, 0, step=5)
+    lead_delay = c2.slider("Additional supplier lead time (days)", 0, 60, 0)
+    scenario_source = source.copy(deep=True)
+    # Use validated, normalized input so uploaded headings work in both views.
+    from inventory_optimizer.analysis import validate_inventory_data
+    scenario_source = validate_inventory_data(scenario_source)
+    scenario_source["avg_daily_demand"] *= 1 + demand_change / 100
+    scenario_source["demand_std_dev"] *= 1 + demand_change / 100
+    scenario_source["lead_time_days"] += lead_delay
+    scenario = analyze_inventory(
+        scenario_source, service_level=service_level_pct / 100,
+        excess_days_threshold=excess_days,
+    )
+    baseline = analyzed.loc[
+        analyzed["category"].isin(selected_categories)
+        & analyzed["abc_class"].isin(selected_abc)
+    ]
+    scenario = scenario.loc[scenario["sku"].isin(baseline["sku"])]
+    base_kpis, scenario_kpis = calculate_kpis(baseline), calculate_kpis(scenario)
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Scenario purchase value", format_money(scenario_kpis["recommended_order_value"], currency),
+              delta=format_money(scenario_kpis["recommended_order_value"] - base_kpis["recommended_order_value"], currency), delta_color="inverse")
+    c2.metric("Scenario SKUs to reorder", scenario_kpis["reorder_skus"],
+              delta=scenario_kpis["reorder_skus"] - base_kpis["reorder_skus"], delta_color="inverse")
+    c3.metric("Cost added by minimums / packs", format_money(float(scenario["constraint_extra_cost"].sum()), currency))
+    comparison = scenario[["sku", "product_name", "supplier", "recommended_order_qty", "suggested_purchase_cost", "constraint_extra_cost", "order_explanation"]].merge(
+        baseline[["sku", "recommended_order_qty"]].rename(columns={"recommended_order_qty": "baseline_order_qty"}), on="sku", validate="one_to_one"
+    )
+    comparison["additional_units"] = comparison["recommended_order_qty"] - comparison["baseline_order_qty"]
+    st.dataframe(comparison, hide_index=True, width="stretch")
+    st.download_button("Download scenario comparison", comparison.to_csv(index=False).encode("utf-8"),
+                       "inventory_scenario.csv", "text/csv")
+    st.info("Demand and its standard deviation scale together in this scenario. Existing inbound quantities are counted without arrival dates; this cannot establish whether a shipment prevents a stockout.")
 
 st.markdown(
     '<div class="footer">Decision-support portfolio project · 2020 · Demo data only · Built by Braulio</div>',

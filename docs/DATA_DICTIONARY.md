@@ -73,4 +73,8 @@ The final score is capped at 100. It helps planners order the work queue; the fi
 - Service level is global for the analyzed run.
 - Cost and price fields use the selected reporting currency without conversion.
 - Inbound quantities are assumed valid and available within the relevant replenishment horizon.
-- No supplier MOQ, case-pack, shelf-life, capacity, or budget constraints are modeled.
+- Supplier MOQ and case-pack constraints are applied when supplied. Shelf-life, capacity, supplier-level minimum spend and budget constraints are not modeled.
+
+## v1.1 purchasing fields
+
+`min_order_qty`: optional nonnegative whole-unit minimum per SKU (default 0). `case_pack`: optional positive whole-unit order multiple (default 1). A positive base order is raised to at least the minimum and rounded up to a full pack. `unconstrained_order_qty`, `constraint_extra_units`, `constraint_extra_cost`, and `order_explanation` expose the calculation. No minimum applies when the base order is zero.
